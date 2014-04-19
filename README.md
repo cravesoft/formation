@@ -162,7 +162,10 @@ The script clones the nvm repository to `~/.nvm` and adds the source line to the
     # Enable module ssl
     sudo a2enmod ssl
 
-    # Set access permissions
+## Site Configuration
+
+Set access permissions:
+
     cd $HOME
     chgrp -R www-data formation
     chmod -R 750 formation
@@ -170,14 +173,9 @@ The script clones the nvm repository to `~/.nvm` and adds the source line to the
     chmod 644 formation/.htaccess
 
     # Make sure Apache can write to the log/, assets/css/ and cache/ directories
-    chown -R www-data formation/log/
-    chown -R www-data formation/cache/
-    chown -R www-data formation/assets/css
     chmod -R u+rwX formation/log/
     chmod -R u+rwX formation/cache/
     chmod -R u+rwX formation/assets/css
-
-## Site Configuration
 
 Copy and enable an example site config:
 
