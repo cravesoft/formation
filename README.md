@@ -78,7 +78,7 @@ Install the sass Gem:
 
 # 3. Formation
 
-    # We'll install Formation into your home directory
+    # We'll install Formation into the home directory
     cd $HOME
 
 ## Clone the Source
@@ -86,7 +86,7 @@ Install the sass Gem:
     # Clone Formation repository
     git clone https://github.com/cravesoft/formation.git
 
-    # Go to formation dir
+    # Go to Formation dir
     cd formation
 
 ## Configure it
@@ -134,7 +134,7 @@ The script clones the nvm repository to `~/.nvm` and adds the source line to the
 
 ## Initialize Database and Activate Advanced Features
 
-    # Process the schema and create it directly on Entity Storate Connection
+    # Process the schema and create it directly on Entity Storage Connection
     php vendor/bin/doctrine orm:schema-tool:create
 
     cd script
@@ -144,6 +144,7 @@ The script clones the nvm repository to `~/.nvm` and adds the source line to the
     php update.php
     
 **Debug:**
+
     # Fill the database
     php fill.php
 
@@ -161,20 +162,20 @@ The script clones the nvm repository to `~/.nvm` and adds the source line to the
     # Enable module ssl
     sudo a2enmod ssl
 
+    # Set access permissions
     cd $HOME
-    
-    sudo chmod 644 formation/.htaccess
-    sudo chgrp -R www-data formation
-    sudo chmod -R 750 formation
-    sudo chmod g+s formation
+    chgrp -R www-data formation
+    chmod -R 750 formation
+    chmod g+s formation
+    chmod 644 formation/.htaccess
 
-    # Make sure Formation can write to the log/, assets/css/ and cache/ directories
-    sudo chown -R www-data formation/log/
-    sudo chown -R www-data formation/cache/
-    sudo chown -R www-data formation/assets/css
-    sudo chmod -R u+rwX formation/log/
-    sudo chmod -R u+rwX formation/cache/
-    sudo chmod -R u+rwX formation/assets/css
+    # Make sure Apache can write to the log/, assets/css/ and cache/ directories
+    chown -R www-data formation/log/
+    chown -R www-data formation/cache/
+    chown -R www-data formation/assets/css
+    chmod -R u+rwX formation/log/
+    chmod -R u+rwX formation/cache/
+    chmod -R u+rwX formation/assets/css
 
 ## Site Configuration
 
@@ -188,12 +189,3 @@ Make sure to edit the config file to match your setup:
     # Change ServerName to the fully-qualified
     # domain name of your host serving Formation.
     sudo editor /etc/apache2/sites-available/formation.conf
-
-libapache2-mod-php5
-php5-json
-php5-ldap
-/etc/apache2/conf-available/silex.conf
-/etc/apache2/conf-available/phpmyadmin.conf
-recode iso-8859-1..utf-8 users.csv
-sudo make-ssl-cert /usr/share/ssl-cert/ssleay.cnf /etc/ssl/private/localhost.pem
-sudo a2ensite ssl
