@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include 'layouts/_head.html.twig' %}
+    <body>
+        {% include 'layouts/_head_panel.html.twig' %}
+        <div class="container">
+        {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

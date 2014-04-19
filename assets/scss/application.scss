@@ -1,0 +1,38 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets
+ * available in this directory and any sub-directories. You're free to add
+ * application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style
+ * scope.
+*/
+
+@import "main/layout.scss";
+
+/**
+ * Generic css (forms, nav etc):
+ */
+@import "generic/common.scss";
+@import "generic/typography.scss";
+@import "generic/lists.scss";
+@import "generic/ui_box.scss";
+@import "generic/forms.scss";
+@import "generic/buttons.scss";
+@import "generic/selects.scss";
+@import "sections/profile.scss";
+
+/**
+ * Page specific styles (issues, projects etc):
+ */
+@import "sections/header.scss";
+@import "sections/nav.scss";
+@import "sections/dashboard.scss";
+@import "sections/login.scss";
+@import "sections/agenda.scss";
+@import "sections/trainings.scss";
+@import "sections/training.scss";
+@import "sections/sessions.scss";
+
+/**
+ * UI themes:
+ */
+@import "themes/ui_basic.scss";

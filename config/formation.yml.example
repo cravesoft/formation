@@ -1,0 +1,64 @@
+# # # # # # # # # # # # #
+# Formation config file #
+# # # # # # # # # # # # #
+#
+# How to use:
+# 1. copy file as formation.yml
+# 2. Replace formation -> host with your domain
+# 3. Replace formation -> email_from
+
+# 1. Formation app settings
+# =========================
+
+formation:
+    ## Web server settings (note: host is the FQDN, do not include http://)
+    host: localhost
+    port: 80
+    https: false
+
+    debug: false
+
+    default_language: en
+    languages: [fr, en]
+
+    ## Email settings
+    # Email address used in the "From" field in mails sent by Formation
+    email_from: formation@localhost
+
+# 2. Database settings
+# ====================
+
+database:
+    driver: pdo_mysql
+    host: localhost
+    dbname: formation_production
+    user: formation
+    password: "secure password"
+    charset: utf8
+    driverOptions:
+        1002: SET NAMES utf8
+
+# 2. Mail settings
+# ================
+
+mailer:
+    host: '_your_smtp_server'
+    port: 25
+    username: '_smtp_username'
+    password: '_smtp_password'
+    encryption: tls
+    auth_mode: null
+
+# 3. LDAP settings
+# ================
+
+## LDAP settings
+ldap:
+    enabled: false
+    host: '_your_ldap_server'
+    base: '_the_base_where_you_search_for_users'
+    port: 636
+    uid: 'sAMAccountName'
+    method: 'ssl' # "tls" or "ssl" or "plain"
+    bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+    password: '_the_password_of_the_bind_user'

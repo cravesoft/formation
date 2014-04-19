@@ -1,0 +1,131 @@
+{% extends "layouts/dashboard.html.twig" %}
+{% set active_page = "trainings" %}
+{% block content %}
+{% if is_granted('ROLE_ADVANCED_USER') %}
+<a class="pull-right btn btn-new" title="New Merge Request" href="{{ url('new_training') }}">
+    <span class="glyphicon glyphicon-plus"></span>
+    New Training Program
+</a>
+{% endif %}
+<h3 class="page-title">Training programs</h3>
+<p class="light">All available training programs are listed here.</p>
+<hr>
+<div class="row">
+    <div class="col-md-3 hidden-sm hidden-xs side-filters">
+        {% if is_granted('ROLE_ADVANCED_USER') %}
+        <fieldset>
+            <legend>Visibility</legend>
+            <ul class="nav nav-pills nav-stacked nav-small visibility-filter">
+                <li{% if 'enabled' == status %} class="active"{% endif %}>
+                    <a href="{{ path('trainings', app.request.query.all|merge({status: 'enabled'})) }}">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        Enabled
+                    </a>
+                </li>
+                <li{% if 'disabled' == status %} class="active"{% endif %}>
+                    <a href="{{ path('trainings', app.request.query.all|merge({status: 'disabled'})) }}">
+                        <span class="glyphicon glyphicon-eye-close"></span>
+                        Disabled
+                    </a>
+                </li>
+            </ul>
+        </fieldset>
+        {% endif %}
+        <fieldset>
+            <legend>{% trans %}Groups{% endtrans %}</legend>
+            <ul class="nav nav-pills nav-stacked nav-small">
+                {% for g in groups %}
+                <li class="light{% if g.name == group %} active{% endif %}">
+                    <a href="{{ path('trainings', app.request.query.all|merge({group: g.name})) }}">
+                        <i class="fa fa-folder-open-o"></i> {{g.name}}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </fieldset>
+        <fieldset>
+            <a class="cgray pull-right" href="{{ path('trainings', app.request.query.all|merge({status: null, group: null})) }}">
+                <span class="glyphicon glyphicon-remove"></span>
+                <strong>Clear filter</strong>
+            </a>
+        </fieldset>
+    </div>
+    <div class="col-md-9">
+        <ul class="bordered-list my-trainings top-list">
+            {% for training in trainings %}
+            {% set group = training.group %}
+            {% if training.isEnabled == true or is_granted('ROLE_ADMIN') == true or training.owner.id == user.id %}
+            <li class="my-training-row">
+                <h4 class="training-title">
+                    <a href="{{ path('training', {training_id: training.id}) }}">
+                        <span>{{ training.title }}</span>
+                        <span class="label label-info">
+                            <i class="fa fa-folder-open-o"></i> {{ group.name }}
+                        </span>
+                    </a>
+                </h4>
+                {% if is_granted('ROLE_ADMIN') %}
+                <div class="pull-right">
+                    <a class="btn btn-small set-training{% if training.isEnabled == false %} hidden{% endif %}" rel="nofollow" data-training_id="{{training.id}}" data-action="disable"><span class="glyphicon glyphicon-eye-close"></span> Disable</a>
+                    <a class="btn btn-small set-training{% if training.isEnabled == true %} hidden{% endif %}" rel="nofollow" data-training_id="{{training.id}}" data-action="enable"><span class="glyphicon glyphicon-eye-open"></span> Enable</a>
+                    <a class="btn btn-small btn-remove delete-training" rel="nofollow" href="#" data-toggle="modal" data-target="#deleteModal" data-training_id="{{training.id}}" data-action="delete">Delete</a>
+                </div>
+                {% elseif is_granted('ROLE_ADVANCED_USER') %}
+                <div class="pull-right">
+                    {% if training.isEnabled == false %}
+                    <a class="btn btn-small" disabled="disabled"><span class="glyphicon glyphicon-eye-close"></span> Disabled</a>
+                    {% else %}
+                    <a class="btn btn-small" disabled="disabled"><span class="glyphicon glyphicon-eye-open"></span> Enabled</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="training-info">
+                    <p>
+                        {{training.description}}
+                    </p>
+                    <p>
+                        #{{training.id}}
+                        <span>
+                            by
+                            <i class="fa fa-user fa-fw light"></i>
+                            {% for instructor in training.instructors %}
+                                {% if loop.last %}
+                                    {{instructor.name}}
+                                {% else %}
+                                    {{instructor.name}},
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                    </p>
+                </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        <div>
+        {% include 'layouts/_pagination.html.twig' %}
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="deleteTitle">Are you sure you want to delete this training?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="training-title">
+                        <h4></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button id="delete" type="button" class="btn btn-success">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ asset('js/trainings.js') }}"></script>
+{% endblock %}

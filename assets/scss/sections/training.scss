@@ -1,0 +1,88 @@
+.training-info {
+    .description {
+        border-bottom: 1px solid #E5E5E5;
+        line-height: 22px;
+        margin: 0 0 35px;
+        padding: 0 0 20px;
+        h1 {
+            font-size: 20px;
+            border-bottom: 1px solid #DDD;
+            color: #3F3F3F;
+            display: block;
+            font-weight: 400;
+            line-height: 22px;
+            margin: 40px 0 10px;
+        }
+        h2 {
+            font-size: 16px;
+            border-bottom: 1px solid #EEE;
+            color: #3F3F3F;
+            display: block;
+            font-weight: 400;
+            line-height: 22px;
+            margin: 40px 0 10px;
+        }
+        .description {
+            border-bottom: 1px solid #E5E5E5;
+            line-height: 22px;
+            margin: 0 0 35px;
+            padding: 0 0 20px;
+        }
+    }
+    .about-instructors {
+        list-style: none outside none;
+        li {
+            margin: 0 0 30px;
+            overflow: hidden;
+            padding: 0;
+        }
+        div.profile-photo {
+            background-size: cover;
+            border-radius: 8px;
+            display: inline-block;
+            float: left;
+            height: 90px;
+            margin: 0 20px 0 0;
+            width: 90px;
+        }
+        h4, p {
+            float: left;
+        }
+        p {
+            color: #959595;
+            line-height: 28px;
+            margin: 0;
+        }
+        img + h4 + p {
+            width: 510px;
+        }
+    }
+}
+
+.training-description {
+    margin: 0 0 20px 0;
+    color: #d3d3d3;
+    font-style: italic;
+}
+
+.create-request {
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.add-training {
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 26px;
+    margin-bottom: 20px;
+}
+
+.modal-body {
+    ul.bordered-list {
+        font-size: 14px;
+    }
+}

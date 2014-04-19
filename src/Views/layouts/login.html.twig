@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Formation</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        
+        <!-- Le styles -->
+        <link href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        {% stylesheets 'assets/scss/application.scss' filter='scss,yui_css' output='/assets/css/application.css' %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+        {% endstylesheets %}
+        
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    
+    </head>
+    <body class="login-page">
+        <div class="flash-container">
+            <center>
+                <h4>
+                {% if error is not null %}
+                {{ error }}
+                {% else %}
+                You need to sign in before continuing.
+                {% endif %}
+                </h4>
+            </center>
+        </div>
+        <hr>
+        <div class="container">
+            <div class="content">
+                <center>
+                    <h1>Formation</h1>
+                    <p class="light">
+                    Formation helps you manage training programs.
+                    </p>
+                </center>
+            </div>
+        </div>
+        <hr>
+        <div class="container">
+            <div class="content">
+                <div class="login-box">
+                    <h3 class="page-title">Sign in</h3>
+                    <form accept-charset="UTF-8" action="{{ path('login_check') }}" method="post">
+                        <input id="user_login" name="_username" value="{{ last_username }}" placeholder="Username or Email" type="text" class="form-control top" autofocus="autofocus" />
+
+                        <input id="user_password" name="_password" value="" placeholder="Password" type="password" class="form-control bottom" />
+
+                        <div class="clearfix append-bottom-10">
+                            <label class="checkbox remember_me" for="user_remember_me">
+                                <input id="user_remember_me" type="checkbox" name="_remember_me">
+                                <span>Remember me</span>
+                            </label>
+                        </div>
+
+                        <div>
+                            <div class="pull-left">
+                                <input class="btn-create btn" type="submit" value="Sign in" name="commit">
+                            </div>
+                            <div class="pull-right">
+                                <a class="btn" href="">Forgot your password?</a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ asset('bower_components/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script>
+        //<![CDATA[
+        $(function(){
+            $(".flash-container").slideDown("slow");
+            $(".flash-container").click(function(){
+                $(this).slideUp("slow");
+            });
+            setTimeout("hideFlash()",3000);
+        });
+        
+        function hideFlash(){
+            $(".flash-container").slideUp("slow");
+        }
+        //]]>
+    </script>
+
+  </body>
+</html>

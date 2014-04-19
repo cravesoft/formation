@@ -1,0 +1,13 @@
+{% set title = 'New reservation' %}
+{% extends "layouts/navless.html.twig" %}
+{% block content %}
+<div class="content navless-container">
+    <div class="session-form-holder">
+        <h3 class="page-title">{% trans %}New reservation{% endtrans %}</h3>
+        <hr>
+        <form id="new_reservation" class="form-horizontal session-form" method="post" enctype="multipart/form-data" action="" accept-charset="UTF-8">
+            <div id="calendar"></div>
+        </form>
+    </div>
+</div>
+{% endblock %}

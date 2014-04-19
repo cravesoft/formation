@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <h1 style="background: #EEE; border-bottom: 1px solid #DDD; color: #474D57; font: normal 20px Helvetica, Arial, sans-serif; margin: 0; padding: 5px 10px; line-height: 32px; font-size: 16px;">
+        {{base_url}}
+        |
+        <a href="{{ url('requests') }}" style="color: #29B; text-decoration: none">{{manager.name}} / Requests</a>
+        </h1>
+        <table align="left" border="0" cellpadding="0" cellspacing="0" style="padding: 10px 0;" width="100%">
+            <tr>
+                <td align="left" style="margin: 0; padding: 10px;">
+                    <p>A training request is waiting for you approval.</p>
+                    <p>
+                        <a href="{{ url('requests') }}">{{manager.name}} / Requests</a>
+                    </p>
+                    <br>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="margin: 0; padding: 10px;">
+                    <p style="font-size:small;color:#777">
+                        You're receiving this notification because you are the manager of {{user.name}}.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

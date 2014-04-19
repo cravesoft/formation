@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set title = 'Dashboard' %}
+    {% include 'layouts/_head.html.twig' %}
+    <body>
+        {% include 'layouts/_head_panel.html.twig' %}
+        <div class="navbar navbar-default navbar-static-top main-nav">
+            <div class="container">
+                {% include 'layouts/nav/_dashboard.html.twig' %}
+            </div>
+        </div>
+        <div class="container">
+        {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

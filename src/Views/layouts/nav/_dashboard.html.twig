@@ -1,0 +1,25 @@
+{% set active_page = active_page|default('trainings') %}
+<ul class="nav navbar-tabs nav-justified">
+    <!--<li class="col-md-3{% if 'home' == active_page %} active{% endif %}">
+        <a title="Home" href="{{ path('home') }}"><i class="fa fa-lg fa-home"></i></a>
+    </li>-->
+    <li class="{% if 'trainings' == active_page %} active{% endif %}">
+        <a href="{{ path('trainings') }}">Training programs</a>
+    </li>
+    <li class="{% if 'sessions' == active_page %} active{% endif %}">
+        <a href="{{ path('sessions') }}">My sessions</a>
+    </li>
+    {% if user.team|length > 0 %}
+    <li class="{% if 'requests' == active_page %} active{% endif %}">
+        <a href="{{ path('requests') }}">
+            Team requests
+            {#{% if num_waiting_requests > 0 %}
+            <span class="badge">{{ num_waiting_requests }}</span>
+            {% endif %}#}
+        </a>
+    </li>
+    {% endif %}
+    <li class="{% if 'agenda' == active_page %} active{% endif %}">
+        <a href="{{ path('agenda') }}">Agenda</a>
+    </li>
+</ul>

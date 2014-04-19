@@ -1,0 +1,17 @@
+{
+    "name": "formation",
+    "version": "1.0.0",
+    "dependencies": {
+        "bootstrap": "latest",
+        "fullcalendar": "latest",
+        "humane-dates": "latest",
+        "font-awesome": "latest",
+        "markdown": "latest",
+        "to-markdown": "latest",
+        "bootstrap-markdown": "latest",
+        "select2-bootstrap3-css": "latest",
+        "select2": "latest",
+        "jquery-ui": "latest"
+    },
+    "devDependencies": {}
+}

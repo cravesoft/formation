@@ -1,0 +1,12 @@
+{% set active_page = active_page|default('profile') %}
+<ul class="nav navbar-tabs nav-justified">
+    <li class="col-md-3{% if 'profile' == active_page %} active{% endif %}">
+        <a title="Profile" href="{{ url('profile') }}"><i class="fa fa-lg fa-home"></i></a>
+    </li>
+    <li class="{% if 'notifications' == active_page %} active{% endif %}">
+        <a href="{{ url('notifications') }}">Notifications</a>
+    </li>
+    <li class="{% if 'history' == active_page %} active{% endif %}">
+        <a href="{{ url('history') }}">History</a>
+    </li>
+</ul>

@@ -1,0 +1,6 @@
+{% extends "layouts/dashboard.html.twig" %}
+{% set active_page = "agenda" %}
+{% block content %}
+<div id="calendar"></div>
+<script src="{{ asset('js/calendar.js') }}"></script>
+{% endblock %}

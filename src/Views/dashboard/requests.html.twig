@@ -1,0 +1,186 @@
+{% extends "layouts/dashboard.html.twig" %}
+{% set active_page = "requests" %}
+{% block content %}
+<h3 class="page-title">Team requests</h3>
+<div class="pull-right">
+    <div class="dropdown inline">
+        <a class="dropdown-toggle btn btn-small" href="#" data-toggle="dropdown">
+            <span class="light">sort:</span>
+            {% if 'ascending' == sort %}
+                Date (ascending)
+            {% elseif 'descending' == sort %}
+                Date (descending)
+            {% else %}
+                Name
+            {% endif %}
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('requests', app.request.query.all|merge({sort: 'name'})) }}">Name</a>
+                <a href="{{ path('requests', app.request.query.all|merge({sort: 'ascending'})) }}">Date (ascending)</a>
+                <a href="{{ path('requests', app.request.query.all|merge({sort: 'descending'})) }}">Date (descending)</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<p class="light">All sessions your team members have registered to are listed here.</p>
+<hr>
+<div class="row">
+    <div class="col-md-3 hidden-sm hidden-xs side-filters">
+        <fieldset>
+            <ul class="nav nav-pills nav-stacked">
+                <li{% if 'all' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({scope: 'all'})) }}">
+                        All
+                        <span class="pull-right">{{ num_requests['all'] }}</span>
+                    </a>
+                </li>
+                <li{% if 'created' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({scope: 'created'})) }}">
+                        Awaiting for my approval
+                        <span class="pull-right">{{ num_requests['created'] }}</span>
+                    </a>
+                </li>
+                <li{% if 'accepted' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({scope: 'accepted'})) }}">
+                        Accepted by me
+                        <span class="pull-right">{{ num_requests['accepted'] }}</span>
+                    </a>
+                </li>
+                <li{% if 'refused' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({scope: 'refused'})) }}">
+                        Refused by me
+                        <span class="pull-right">{{ num_requests['refused'] }}</span>
+                    </a>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset class="state-filter">
+            <legend>State</legend>
+            <ul class="nav nav-pills">
+                <li{% if 'all' == state %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({state: 'all'})) }}">All</a>
+                </li>
+                <li{% if 'past' == state %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({state: 'past'})) }}">Past</a>
+                </li>
+                <li{% if 'incoming' == state %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({state: 'incoming'})) }}">Incoming</a>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset class="state-filter">
+            <legend>Members</legend>
+            <ul class="nav nav-pills nav-stacked nav-small">
+                {% for m in members %}
+                <li{% if m.id == member %} class="active"{% endif %}>
+                    <a href="{{ path('requests', app.request.query.all|merge({member: m.id})) }}">{{m.name}}<small class="pull-right">{{m.requests|length}}</small></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans %}Groups{% endtrans%}</legend>
+            <ul class="nav nav-pills nav-stacked nav-small">
+                {% for g in groups %}
+                <li class="light{% if g.name == group %} active{% endif %}">
+                    <a href="{{ path('requests', app.request.query.all|merge({group: g.name})) }}">
+                        <i class="fa fa-folder-open-o"></i> {{g.name}}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </fieldset>
+        <fieldset>
+            <a class="cgray pull-right" href="{{ path('requests', app.request.query.all|merge({member: null, group: null})) }}">
+                <span class="glyphicon glyphicon-remove"></span>
+                <strong>Clear filter</strong>
+            </a>
+        </fieldset>
+    </div>
+    <div class="col-md-9">
+        <ul class="bordered-list my-sessions top-list">
+            {% for request in requests %}
+            {% set user = request.user %}
+            {% set session = request.session %}
+            {% set training = session.training %}
+            {% set group = training.group %}
+            {% set start_date = session.reservations|first.startDate %}
+            {% set end_date = session.reservations|last.endDate %}
+            <li class="my-session-row">
+                <h4 class="session-title">
+                    <a href="{{ path('training', {training_id: training.id}) }}">
+                        {{ training.title }}
+                    </a>
+                    <small><span class="label label-info">
+                        <i class="fa fa-folder-open-o"></i> {{ group.name }}
+                    </span></small>
+                </h4>
+                <div class="pull-right">
+                {% if request.status == 0 %}
+                    {% if start_date > date() %}
+                        <a class="btn btn-small btn-new edit-request" rel="nofollow" href="#" data-request_id="{{request.id}}" data-action="accept">Accept</a>
+                        <a class="btn btn-small btn-remove edit-request" rel="nofollow" href="#" data-request_id="{{request.id}}" data-action="refuse" data-confirm="Are you sure?">Refuse</a>
+                    {% else %}
+                        <a class="btn btn-small" disabled="disabled" rel="nofollow">Expired</a>
+                    {% endif %}
+                {% elseif request.status == 1 %}
+                    <a class="btn btn-small btn-new" disabled="disabled" rel="nofollow">Accepted</a>
+                {% elseif request.status == 2 %}
+                    <a class="btn btn-small btn-remove" disabled="disabled" rel="nofollow">Refused</a>
+                {% endif %}
+                </div>
+                <div class="session-info">
+                    <p>
+                        <span class="glyphicon glyphicon-calendar light"></span>
+                        {{ start_date|date("F d, Y") }} - {{ end_date|date("F d, Y") }}
+                    </p>
+                </div>
+                <div class="user-info">
+                    <p>
+                        <span class="glyphicon glyphicon-user light"></span>
+                        requested by {{ user.name }}
+                    </p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div>
+        {% include 'layouts/_pagination.html.twig' %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="registerTitle">Are you sure you want to <span class="action"></span> this training request?</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="bordered-list">
+                    <li class="training-title">
+                        <h4></h4>
+                    </li>
+                    <li class="session-time">
+                        <strong>When:</strong>
+                        <span></span>
+                    </li>
+                    <li class="session-level">
+                        <strong>Level:</strong>
+                        <span></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <button id="register" type="button" class="btn btn-success">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ asset('js/requests.js') }}"></script>
+{% endblock %}

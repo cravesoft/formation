@@ -1,0 +1,51 @@
+{% extends "layouts/profile.html.twig" %}
+{% set active_page = "profile" %}
+{% block content %}
+<div class="content">
+    <div class="profile-form-holder">
+        <h3 class="page-title">Profile settings</h3>
+        <p class="light">This information appears on your profile.</p>
+        <hr>
+        <form id="edit_user" class="form-horizontal user-form" method="post" enctype="multipart/form-data" action="{{ path('check_profile') }}" accept-charset="UTF-8">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="user_givenname">
+                    <strong>Name</strong>
+                </label>
+                <div class="col-sm-10">
+                    <div class="profile-photo" title="{{user.name}}" style="background-image:url(http://placekitten.com/g/90/90)"></div>
+                    <input id="user_givenname" class="form-control top js-gfm-input" type="text" value="{{user.givenname}}" size="255" required="required" name="user[givenname]" maxlength="255" style="width: 200px;">
+                    <input id="user_surname" class="form-control bottom js-gfm-input" type="text" value="{{user.surname}}" size="255" required="required" name="user[surname]" maxlength="255" style="width: 200px;">
+                    <p class="hint">Enter your name, so people you know can recognize you.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="user_email">
+                    <strong>Email</strong>
+                </label>
+                <div class="col-sm-10">
+                    <input id="user_email" class="form-control js-gfm-input" type="text" value="{{user.email}}" size="255" required="required" name="user[email]" maxlength="255">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="user_website_url">
+                    <strong>Website</strong>
+                </label>
+                <div class="col-sm-10">
+                    <input id="user_website_url" class="form-control js-gfm-input" type="text" value="{{user.website}}" size="255" name="user[website_url]" maxlength="255">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="user_bio">Bio</label>
+                <div class="col-sm-10">
+                    <textarea id="user_bio" class="form-control js-gfm-input" rows="14" name="user[bio]" maxlength="1024">{{user.bio}}</textarea>
+                <p class="hint">Tell us about yourself in fewer than 1024 characters.</p>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input class="btn btn-create" type="submit" value="Save changes" name="commit">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

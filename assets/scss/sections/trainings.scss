@@ -1,0 +1,42 @@
+.trainings {
+    &.nav-tabs {
+        margin-bottom: 15px;
+        li {
+            margin-bottom: -1px;
+            -moz-box-sizing: border-box;
+            a {
+                border-color: #EEEEEE #EEEEEE #DDDDDD;
+                color: #888888;
+                line-height: 20px;
+                margin-right: 7px;
+                padding: 8px 20px;
+                .badge {
+                    background-color: #EEEEEE;
+                    color: #888888;
+                    text-shadow: 0 1px 1px #FFFFFF;
+                }
+            }
+            &.active {
+                a {
+                    background-color: #FFFFFF;
+                    border-color: #DDDDDD #DDDDDD rgba(0, 0, 0, 0);
+                    border-image: none;
+                    border-style: solid;
+                    border-width: 1px;
+                    color: #555555;
+                    cursor: default;
+                }
+            }
+        }
+    }
+}
+
+.lists-separator {
+    border-top: 1px dashed #CCCCCC;
+    margin: 10px 0;
+}
+
+.training-row-title {
+    font-size: 14px;
+}
+

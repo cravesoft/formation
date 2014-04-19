@@ -1,0 +1,57 @@
+.dash-sidebar-tabs {
+    border: medium none;
+    margin: 0;
+    li {
+        &.active {
+            a {
+                background-color: #EEE;
+                border-bottom: 1px solid #EEE !important;
+                &:hover {
+                    background: #EEE;
+                }
+            }
+        }
+        a {
+            border-color: #DDD !important;
+        }
+    }
+}
+
+.session-row, .group-row {
+    font-size: 14px;
+    line-height: 24px;
+    padding: 10px 12px !important;
+    a {
+        display: block;
+    }
+    .arrow {
+        color: #666;
+        float: right;
+        font-size: 20px;
+        margin: 0;
+        padding: 0 5px;
+    }
+    .last-activity {
+        color: #AAA;
+        display: block;
+        float: right;
+        font-size: 12px;
+        .date {
+            color: #777;
+        }
+    }
+    .session-name, .group-name {
+        font-weight: 500;
+    }
+}
+
+.side {
+    .ui-box {
+        box-shadow: none;
+        margin: 0;
+        .nav-sessions-tabs li {
+            padding: 0;
+        }
+    }
+}
+

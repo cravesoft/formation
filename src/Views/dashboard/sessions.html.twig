@@ -1,0 +1,151 @@
+{% extends "layouts/dashboard.html.twig" %}
+{% set active_page = "sessions" %}
+{% block content %}
+<h3 class="page-title">My sessions</h3>
+<div class="pull-right">
+    <div class="dropdown inline">
+        <a class="dropdown-toggle btn btn-small" href="#" data-toggle="dropdown">
+            <span class="light">sort:</span>
+            {% if 'ascending' == sort %}
+                Date (ascending)
+            {% elseif 'descending' == sort %}
+                Date (descending)
+            {% else %}
+                Name
+            {% endif %}
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('sessions', app.request.query.all|merge({sort: 'name'})) }}">Name</a>
+                <a href="{{ path('sessions', app.request.query.all|merge({sort: 'ascending'})) }}">Date (ascending)</a>
+                <a href="{{ path('sessions', app.request.query.all|merge({sort: 'descending'})) }}">Date (descending)</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<p class="light">All sessions you have registered to are listed here.</p>
+<hr>
+<div class="row">
+    <div class="col-md-3 hidden-sm hidden-xs side-filters">
+        <fieldset>
+            <ul class="nav nav-pills nav-stacked">
+                <li{% if 'all' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('sessions', app.request.query.all|merge({scope: 'all'})) }}">
+                        All
+                        <span class="pull-right">{{ num_sessions['all'] }}</span>
+                    </a>
+                </li>
+                <li{% if 'created' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('sessions', app.request.query.all|merge({scope: 'created'})) }}">
+                        Awaiting for manager's approval
+                        <span class="pull-right">{{ num_sessions['created'] }}</span>
+                    </a>
+                </li>
+                <li{% if 'accepted' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('sessions', app.request.query.all|merge({scope: 'accepted'})) }}">
+                        Accepted by manager
+                        <span class="pull-right">{{ num_sessions['accepted'] }}</span>
+                    </a>
+                </li>
+                <li{% if 'refused' == scope %} class="active"{% endif %}>
+                    <a href="{{ path('sessions', app.request.query.all|merge({scope: 'refused'})) }}">
+                        Refused by manager
+                        <span class="pull-right">{{ num_sessions['refused'] }}</span>
+                    </a>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset class="state-filter">
+            <legend>State</legend>
+            <ul class="nav nav-pills">
+                <li{% if 'all' == state %} class="active"{% endif %}>
+                    <a href="{{ path('sessions', app.request.query.all|merge({state: 'all'})) }}">All</a>
+                </li>
+                <li{% if 'past' == state %} class="active"{% endif %}>
+                    <a href="{{ path('sessions', app.request.query.all|merge({state: 'past'})) }}">Past</a>
+                </li>
+                <li{% if 'incoming' == state %} class="active"{% endif %}>
+                    <a href="{{ path('sessions', app.request.query.all|merge({state: 'incoming'})) }}">Incoming</a>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans %}Groups{% endtrans %}</legend>
+            <ul class="nav nav-pills nav-stacked nav-small">
+                {% for g in groups %}
+                <li class="light{% if g.name == group %} active{% endif %}">
+                    <a href="{{ path('sessions', app.request.query.all|merge({group: g.name})) }}">
+                        <i class="fa fa-folder-open-o"></i> {{g.name}}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </fieldset>
+        <fieldset>
+            <a class="cgray pull-right" href="{{ path('sessions', app.request.query.all|merge({group: null})) }}">
+                <span class="glyphicon glyphicon-remove"></span>
+                <strong>Clear filter</strong>
+            </a>
+        </fieldset>
+    </div>
+    <div class="col-md-9">
+        <ul class="bordered-list my-sessions top-list">
+            {% for session in sessions %}
+            {% set training = session.training %}
+            {% set group = training.group %}
+            {% set request = session.requests %}
+            {% set start_date = session.reservations|first.startDate %}
+            <li class="my-session-row">
+                <h4 class="session-title">
+                    <a href="{{ path('training', {training_id: training.id}) }}">
+                        {{ training.title }}
+                    <span class="label label-info">
+                        <i class="fa fa-folder-open-o"></i> {{ group.name }}
+                    </span>
+                    </a>
+                </h4>
+                <div class="session-info">
+                    <div class="pull-right">
+                        {% if request|first.status == 0 %}
+                            {% if start_date > date() %}
+                                <a class="btn btn-small" disabled="disabled" rel="nofollow">Awaiting</a>
+                            {% else %}
+                                <a class="btn btn-small" disabled="disabled" rel="nofollow">Expired</a>
+                            {% endif %}
+                        {% elseif request|first.status == 1 %}
+                            <a class="btn btn-small btn-new" disabled="disabled" rel="nofollow">Accepted</a>
+                        {% elseif request|first.status == 2 %}
+                            <a class="btn btn-small btn-remove" disabled="disabled" rel="nofollow">Refused</a>
+                        {% endif %}
+                    </div>
+                    <p>
+                        {{training.description}}
+                    </p>
+                    <p>
+                        #{{session.id}}
+                        <span>
+                            by
+                            <i class="fa fa-user fa-fw light"></i>
+                            {% for instructor in training.instructors %}
+                                {% if loop.last %}
+                                    {{instructor.name}}
+                                {% else %}
+                                    {{instructor.name}},
+                                {% endif %}
+                            {% endfor %}
+                            <span class="light">
+                                <time class="time_ago" title="" datetime="{{start_date|date("Y-m-d H:i:s")}}" data-toggle="tooltip" data-placement="top">{{start_date|date("Y-m-d H:i:s")}}</time>
+                            </span>
+                        </span>
+                    </p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div>
+        {% include 'layouts/_pagination.html.twig' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% set title = 'New session' %}
+{% extends "layouts/navless.html.twig" %}
+{% block content %}
+<div class="content navless-container">
+    <div class="session-form-holder">
+        <h3 class="page-title">{% trans %}New session{% endtrans %}</h3>
+        <hr>
+        <form id="new_session" class="form-horizontal session-form" method="post" enctype="multipart/form-data" action="{{ path('new_session_check') }}" accept-charset="UTF-8">
+            <input type="hidden" name="training_id" value="{{training.id}}">
+            <input type="hidden" id="training_title" value="{{training.title}}">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="session_max_users">
+                    <strong>{% trans %}Number of participants{% endtrans %}</strong>
+                </label>
+                <div class="col-sm-10">
+                    <input id="session_max_users" class="form-control js-gfm-input" type="number" required="required" name="session[max_users]" min="1" max="100" value="20" style="width: 50px;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="session_level">
+                    {% trans %}Level{% endtrans %}
+                </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="session[level]" style="width: 200px;">
+                        <option value="0">Beginner</option>
+                        <option value="1" selected>Intermediate</option>
+                        <option value="2">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="session_reservations">
+                    {% trans %}Room reservations{% endtrans %}
+                </label>
+                <div class="col-sm-10">
+                    <div class="pull-right">
+                        <p class="hint">Use the calendar below to make room reservations. Click on an available slot to create a new reservation.<br>Reservations are not effective until the session is saved.</p>
+                    </div>
+                    <div class="append-bottom-20">
+                        <label for="room">Select a room to see available booking times</label>
+                        <select id="room" class="form-control" style="width: 200px;">
+                            {% for room in rooms %}
+                            <option value="{{room.id}}">{{room.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="calendar"></div>
+                    <div id="reservations">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="session_comment">{% trans %}Comment{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <textarea id="session_comment" class="form-control js-gfm-input" rows="2" maxlength="140" name="session[comment]"></textarea>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input id="submit-session" class="btn btn-create" type="submit" value="{% trans %}Submit new session{% endtrans %}" name="commit">
+                <a class="btn btn-cancel" href="{{ path('training', {training_id: training.id}) }}">{% trans %}Cancel{% endtrans %}</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{ asset('js/reservations.js') }}"></script>
+{% endblock %}

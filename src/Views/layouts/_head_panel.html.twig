@@ -1,0 +1,24 @@
+<header class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <!--<a class="menu_tooltip" data-toggle="tooltip" title="Dashboard" href="{{ path('home') }}">-->
+            <a class="menu_tooltip" data-toggle="tooltip" title="Dashboard" href="{{ path('trainings') }}">
+                <h1>FORMATION</h1>
+            </a>
+            <span class="separator"></span>
+        </div>
+        <h1 class="nav navbar-nav area_name">{{title}}</h1>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="menu_tooltip" data-toggle="tooltip" title="Profile settings">
+                <a rel="nofollow" data-method="delete" href="{{ path('profile') }}">
+                    <i class="fa fa-user fa-fw"></i>
+                </a>
+            </li>
+            <li class="menu_tooltip" data-toggle="tooltip" title="Logout">
+                <a rel="nofollow" data-method="delete" href="{{ path('logout') }}">
+                    <i class="fa fa-sign-out fa-fw"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>

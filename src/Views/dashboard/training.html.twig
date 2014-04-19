@@ -1,0 +1,220 @@
+{% extends "layouts/dashboard.html.twig" %}
+{% set active_page = "trainings" %}
+{% block content %}
+<div class="content">
+    {% if training.owner.id == user.id %}
+    <div class="row">
+        <div class="pull-right">
+            {% if training.isEnabled == true %}
+            <a class="btn btn-primary btn-success" href="{{ path('new_session', {'training_id': training.id}) }}">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span>New Session</span>
+            </a>
+            {% endif %}
+            <a class="btn btn-primary" href="{{ path('edit_training', {'training_id': training.id}) }}">
+                <span>Edit Training Program »</span>
+            </a>
+        </div>
+    </div>
+    <hr>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+                <span class="label label-info label-primary"">
+                    <i class="fa fa-folder-open-o"></i> {{ training.group.name }}
+                </span>
+            </p>
+            <h2 class="training-title">{{training.title}}</h2>
+            <h3 class="training-description">{% if training.description|length > 0 %}<i class="fa fa-quote-left pull-left"></i>{{training.description}}{% endif %}</h3>
+            <h4 class="training-instructors">
+            {%for instructor in training.instructors %}
+                {% if loop.last %}
+                    {{instructor.name}}
+                {% else %}
+                    {{instructor.name}},
+                {% endif %}
+            {% endfor %}
+            </h4>
+            <div class="training-info" style="float:none; display:inline-block">
+                <div class="description">
+                <div>
+                {{ training.details | markdown }}
+                </div>
+                </div>
+                <ul class="about-instructors">
+                {% for instructor in training.instructors %}
+                    <li>
+                        <div class="profile-photo" title="{{instructor.name}}" style="background-image:url(http://placekitten.com/g/90/90)"></div>
+                        <div style="float:left;max-width:490px">
+                            <h4 style="float:none">{{instructor.name}}</h4>
+                            <p style="color: #222; float:none">{{instructor.bio}}</p>
+                            <p style="float:none">
+                                <a target="_blank" href="{{instructor.website}}">{{instructor.website}}</a>
+                            </p>
+                        </div>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="side col-md-4">
+            <ul class="nav nav-tabs dash-sidebar-tabs">
+                <li class="active">
+                    <a id="sidebar-projects-tab" href="#incoming-sessions" data-toggle="tab">
+                        Incoming sessions
+                        <span class="badge">{{incoming_sessions|length}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a id="sidebar-groups-tab" href="#past-sessions" data-toggle="tab">
+                        Past sessions
+                        <span class="badge">{{past_sessions|length}}</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="incoming-sessions" class="tab-pane active">
+                    <div class="ui-box">
+                        <ul class="well-bordered-list">
+                            {% if incoming_sessions|length == 0 %}
+                            <li class="session-row">
+                            No session
+                            </li>
+                            {% endif %}
+                            {% for session in incoming_sessions %}
+                            <li class="session-row" id="session{{session.id}}">
+                                <ul class="well-list">
+                                    <li class="session-time">
+                                        <strong>When:</strong>
+                                        <span>
+                                        {{session.reservations|first.startDate|date("F d, Y")}}
+                                        - {{session.reservations|last.endDate|date("F d, Y")}}
+                                        </span>
+                                    </li>
+                                    <li class="session-level">
+                                        <strong>Level:</strong>
+                                        <span>
+                                        {% if session.level == 0 %}
+                                        Beginner
+                                        {% elseif session.level == 1 %} 
+                                        Intermediate
+                                        {% else %}
+                                        Advanced
+                                        {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="session-users">
+                                        <strong>Remaining seats:</strong>
+                                        {% set remaining_seats = session.maxUsers %}
+                                        {% for request in session.requests if request.status != 2 %}
+                                        {% set remaining_seats = remaining_seats - 1 %}
+                                        {% endfor %}
+                                        <span>{% if remaining_seats > 0 %}{{remaining_seats}}{% else %}0{%endif%}</span>
+                                    </li>
+                                    <li>
+                                        {% if training.owner.id == user.id %}
+                                            <a class="btn btn-primary" href="{{ path('edit_session', {'session_id': session.id}) }}">
+                                                <span>Edit Session »</span>
+                                            </a>
+                                        {% else %}
+                                            {% set user_request = null %}
+                                            {% for request in session.requests if request.user|length > 0 %}
+                                            {% set user_request = request %}
+                                            {% endfor %}
+                                            {% if user_request != null %}
+                                                {% if user_request.status == 0 %}
+                                                    <button class="create-request btn" href="#" disabled="disabled">Awaiting for manager's approval</button>
+                                                {% elseif user_request.status == 1 %}
+                                                    <button class="create-request btn btn-success" href="#" disabled="disabled">Accepted by manager</button>
+                                                {% elseif user_request.status == 2 %}
+                                                    <button class="create-request btn btn-remove" href="#" disabled="disabled">Refused by manager</button>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if remaining_seats > 0 %}
+                                                <button class="create-request btn btn-success" href="#" data-toggle="modal" data-target="#requestModal" data-id="{{session.id}}" >Add to my sessions</button>
+                                                {% else %}
+                                                <button class="create-request btn" href="#" disabled="disabled">No more seats available</button>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div id="past-sessions" class="tab-pane">
+                    <div class="ui-box">
+                        <ul class="well-list">
+                            {% if past_sessions|length == 0 %}
+                            <li class="session-row">
+                            No session
+                            </li>
+                            {% endif %}
+                            {% for session in past_sessions %}
+                            <li class="session-row">
+                                <ul class="well-list">
+                                    <li class="session-time">
+                                        <strong>When:</strong>
+                                        <span>
+                                        {{session.reservations|last.startDate|date("F d, Y")}}
+                                        - {{session.reservations|first.endDate|date("F d, Y")}}
+                                        </span>
+                                    </li>
+                                    <li class="session-level">
+                                        <strong>Level:</strong>
+                                        <span>
+                                        {% if session.level == 0 %}
+                                        Beginner
+                                        {% elseif session.level == 1 %} 
+                                        Intermediate
+                                        {% else %}
+                                        Advanced
+                                        {% endif %}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-labelledby="requestTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="requestTitle">Are you sure you want to register to this session?</h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="bordered-list">
+                        <li class="training-title">
+                            <h4></h4>
+                        </li>
+                        <li class="session-time">
+                            <strong>When:</strong>
+                            <span></span>
+                        </li>
+                        <li class="session-level">
+                            <strong>Level:</strong>
+                            <span></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button id="request" type="button" class="btn btn-success">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ asset('js/training.js') }}"></script>
+{% endblock %}

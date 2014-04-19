@@ -1,0 +1,80 @@
+{% set title = 'Edit training program' %}
+{% extends "layouts/navless.html.twig" %}
+{% block content %}
+<div class="content navless-container">
+    <div class="training-form-holder">
+        <h3 class="page-title">Edit training program</h3>
+        <hr>
+        <form id="new_training" class="form-horizontal training-form" method="post" enctype="multipart/form-data" action="{{ path('edit_training_check', {'training_id': training.id}) }}" accept-charset="UTF-8">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="training_title">
+                    <strong>Title</strong>
+                </label>
+                <div class="col-sm-10">
+                    <input id="training_title" class="form-control js-gfm-input" type="text" size="255" required="required" name="training[title]" maxlength="255" autofocus="autofocus" value="{{training.title}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="training_description">
+                    <strong>Description</strong>
+                </label>
+                <div class="col-sm-10">
+                    <input id="training_description" class="form-control js-gfm-input" type="text" size="255" required="required" name="training[description]" maxlength="255" autofocus="autofocus" value="{{training.description}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="training_details">Details</label>
+                <div class="col-sm-10">
+                    <textarea id="training_details" class="form-control js-gfm-input" rows="14" name="training[details]">{{training.details}}</textarea>
+                <p class="hint">Text is parsed with Markdown.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="training_group">
+                    <i class="fa fa-folder-open-o"></i>
+                    {% trans %}Group{% endtrans %}
+                </label>
+                <div class="col-sm-10">
+                    <select class="select2" name="training[group_id]" style="width: 200px;">
+                        {% for group in groups %}
+                        <option value="{{group.id}}"
+                        {% if group.id == training.group.id %}
+                        selected=""
+                        {% endif %}
+                        >{{group.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="training_instructors">
+                    <i class="fa fa-group"></i>
+                    {% trans %}Instructors{% endtrans %}
+                </label>
+                <div class="col-sm-10">
+                    <select id="multi-append" class="select2 select-instructors" multiple="multiple" name="instructors[]" >
+                        <option></option>
+                        {% for u in users %}
+                        <option value="{{ u.id }}">{{ u.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input class="btn btn-create" type="submit" value="Submit changes" name="commit">
+                <a class="btn btn-cancel" href="{{ path('training', {'training_id': training.id}) }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function() {
+        $('select.select2').select2({ placeholder : '' });
+        $('select.select-instructors').select2('val', [
+            {% for instructor in training.instructors %}
+            '{{instructor.id}}',
+            {% endfor %}
+        ]);
+    });
+</script>
+{% endblock %}
