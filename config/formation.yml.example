@@ -52,7 +52,6 @@ mailer:
 # 3. LDAP settings
 # ================
 
-## LDAP settings
 ldap:
     enabled: false
     host: '_your_ldap_server'
