@@ -65,7 +65,7 @@ Install the sass Gem:
     mysql> \q
 
     # Try connecting to the new database with the new user
-    sudo -u formation -H mysql -u formation -p -D formation_production
+    mysql -u formation -p -D formation_production
 
     # Type the password you replaced $password with earlier
 
@@ -115,7 +115,7 @@ Install the sass Gem:
 ## Install front-end dependencies
 
     # Instal Node Version Manager
-    curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+    curl https://raw.github.com/creationix/nvm/v0.5.0/install.sh | sh
 
 **Note:**
 The script clones the nvm repository to `~/.nvm` and adds the source line to the profile (`~/.bash_profile` or `~/.profile`).
