@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * TrainingGroup
  *
  * @Table(name="groups", uniqueConstraints={@UniqueConstraint(name="name", columns={"name"})})
- * @Entity
+ * @Entity(repositoryClass="Repositories\TrainingGroupRepository")
  */
 class TrainingGroup
 {

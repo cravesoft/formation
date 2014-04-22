@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Session
  *
  * @Table(name="sessions", indexes={@Index(name="training_id", columns={"training_id"})})
- * @Entity
+ * @Entity(repositoryClass="Repositories\SessionRepository")
  */
 class Session
 {

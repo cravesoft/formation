@@ -9,6 +9,13 @@
         </div>
         <h1 class="nav navbar-nav area_name">{{title}}</h1>
         <ul class="nav navbar-nav navbar-right">
+            {% if is_granted('ROLE_ADVANCED_USER') %}
+            <li class="menu_tooltip" data-toggle="tooltip" title="Admin settings">
+                <a rel="nofollow" data-method="delete" href="{{ path('admin') }}">
+                    <i class="fa fa-gears fa-fw"></i>
+                </a>
+            </li>
+            {% endif %}
             <li class="menu_tooltip" data-toggle="tooltip" title="Profile settings">
                 <a rel="nofollow" data-method="delete" href="{{ path('profile') }}">
                     <i class="fa fa-user fa-fw"></i>

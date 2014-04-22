@@ -37,18 +37,15 @@ class SessionControllerProvider implements ControllerProviderInterface
             $today = new \DateTime();
 
             /* Get number of sessions */
-            $qb = $em->createQueryBuilder();
-            $qb->select('s.id')
-            ->from('Entities\Session', 's')
-            ->innerjoin('s.requests', 'sr')
-            ->innerjoin('sr.user', 'u', 'with', 'u.id = :user');
-            $params = array('user' => $user);
-            $num_sessions['all'] = getNumResults($em, 'Entities\Session',
-                    $qb->getDQL(), $params);
+            $repository = $em->getRepository('Entities\Session');
+            //$qb = $repository->createQueryBuilder('s')
+            //    ->innerjoin('s.requests', 'sr')
+            //    ->innerjoin('sr.user', 'u', 'with', 'u.id = :user');
+            //$params = array('user' => $user);
+            //$num_sessions['all'] = getNumResults($em, 'Entities\Session', $qb->getDQL(), $params);
+            $num_sessions['all'] = $em->getRepository('Entities\Session')->countByUser($user);
 
-            $qb = $em->createQueryBuilder();
-            $qb->select('s.id')
-                ->from('Entities\Session', 's')
+            $qb = $repository->createQueryBuilder('s')
                 ->innerjoin('s.requests', 'sr', 'with', 'sr.status = :status')
                 ->innerjoin('sr.user', 'u', 'with', 'u.id = :user');
             $params = array('user' => $user, 'status' => SessionRequest::STATUS_CREATED);
@@ -58,18 +55,9 @@ class SessionControllerProvider implements ControllerProviderInterface
             $params = array('user' => $user, 'status' => SessionRequest::STATUS_REFUSED);
             $num_sessions['refused'] = getNumResults($em, 'Entities\Session', $qb->getDQL(), $params);
 
-            /* Get list of groups */
-            $qb = $em->createQueryBuilder();
-            $qb->select(array('g'))
-                ->from('Entities\TrainingGroup', 'g');
-            $query = $qb->getQuery();
-            $groups = $query->getArrayResult();
-
             /* Get number of pages in list of sessions */
             $params = array('user' => $user);
-            $qb = $em->createQueryBuilder();
-            $qb->select('s.id')
-                ->from('Entities\Session', 's');
+            $qb = $repository->createQueryBuilder('s');
             if('all' === $scope) {
                 $qb->innerjoin('s.requests', 'sr')
                     ->innerjoin('sr.user', 'u', 'with', 'u.id = :user');
@@ -96,9 +84,7 @@ class SessionControllerProvider implements ControllerProviderInterface
                 $qb->innerjoin('s.reservations', 'r', 'with', 'r.startDate >= :date');
                 $params['date'] = $today;
             }
-            $num_pages = intval(ceil(floatval(getNumResults($em,
-                    'Entities\Session', $qb->getDQL(),
-                    $params)) / SessionControllerProvider::NUM_SESSIONS_PER_PAGE));
+            $num_pages = intval(ceil(floatval(getNumResults($em, 'Entities\Session', $qb->getDQL(), $params)) / SessionControllerProvider::NUM_SESSIONS_PER_PAGE));
 
             /* Reset page number if greater than number of pages */
             if($page > $num_pages)
@@ -157,6 +143,11 @@ class SessionControllerProvider implements ControllerProviderInterface
             $qb->setParameters($params);
             $query = $qb->getQuery();
             $sessions = new Paginator($query, $fetchJoinCollection = true);
+
+            /* Get list of groups */
+            $qb = $em->getRepository('Entities\TrainingGroup')->createQueryBuilder('g');
+            $query = $qb->getQuery();
+            $groups = $query->getArrayResult();
 
             $body = $app->renderView('dashboard/sessions.html.twig', array(
                         'sort' => $sort,

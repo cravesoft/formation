@@ -122,6 +122,8 @@ $app->mount('/requests', new Controllers\RequestControllerProvider());
 $app->mount('/agenda', new Controllers\AgendaControllerProvider());
 $app->mount('/profile', new Controllers\ProfileControllerProvider());
 $app->mount('/reservations', new Controllers\ReservationControllerProvider());
+$app->mount('/admin', new Controllers\AdminControllerProvider());
+$app->mount('/users', new Controllers\UserControllerProvider());
 
 $app->get('/', function() use($app, $em)
 { 

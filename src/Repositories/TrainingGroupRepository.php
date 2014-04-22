@@ -4,21 +4,21 @@ namespace Repositories;
 
 use Doctrine\ORM\EntityRepository;
 
-class UserRepository extends EntityRepository
+class TrainingGroupRepository extends EntityRepository
 {
-    public function getUsers()
+    public function getTrainingGroups()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('u')
-            ->from('Entities\User', 'u');
+        $qb->select('g')
+            ->from('Entities\TrainingGroup', 'g');
         return $qb->getQuery()->getResult();
     }
 
     public function getSize()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('count(u)')
-            ->from('Entities\User', 'u');
+        $qb->select('count(g)')
+            ->from('Entities\TrainingGroup', 'g');
         return $qb->getQuery()->getSingleScalarResult();
     }
 }

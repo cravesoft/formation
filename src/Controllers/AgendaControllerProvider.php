@@ -18,7 +18,6 @@ class AgendaControllerProvider implements ControllerProviderInterface
             $user = $app->user();
             $body = $app->renderView('dashboard/agenda.html.twig', array(
                 'user' => $user,
-                'groups' => array(),
             ));
             return new Response($body, 200, array('Cache-Control' => 's-maxage=3600, private'));
         })

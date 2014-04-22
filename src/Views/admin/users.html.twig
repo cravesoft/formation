@@ -1,0 +1,69 @@
+{% extends "layouts/admin.html.twig" %}
+{% set active_page = "users" %}
+{% block content %}
+<div class="content">
+    <h3 class="page-title">Users</h3>
+    <a class="pull-right btn btn-new" title="New User" href="{{ url('new_user') }}">
+        <span class="glyphicon glyphicon-plus"></span>
+        New User
+    </a>
+    <p class="light">All users are listed here.</p>
+    <hr>
+    <div class="row">
+        <div class="col-md-3 hidden-sm hidden-xs side-filters">
+            <fieldset>
+                <legend>Role</legend>
+                <ul class="nav nav-pills nav-stacked nav-small roles-filter">
+                    <li{% if 'ROLE_USER' == roles %} class="active"{% endif %}>
+                        <a href="{{ path('users', app.request.query.all|merge({roles: 'ROLE_USER'})) }}">
+                            User
+                        </a>
+                    </li>
+                    <li{% if 'ROLE_ADVANCED_USER' == roles %} class="active"{% endif %}>
+                        <a href="{{ path('users', app.request.query.all|merge({roles: 'ROLE_ADVANCED_USER'})) }}">
+                            Advanced user
+                        </a>
+                    </li>
+                    <li{% if 'ROLE_ADMIN' == roles %} class="active"{% endif %}>
+                        <a href="{{ path('users', app.request.query.all|merge({roles: 'ROLE_ADMIN'})) }}">
+                            Administrator
+                        </a>
+                    </li>
+                </ul>
+            </fieldset>
+            <fieldset>
+                <a class="cgray pull-right" href="{{ path('users', app.request.query.all|merge({roles: null})) }}">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    <strong>Clear filter</strong>
+                </a>
+            </fieldset>
+        </div>
+        <div class="col-md-9">
+            <ul class="bordered-list my-users top-list">
+                {% for user in users %}
+                <li class="my-user-row">
+                    <p class="user-name">
+                        <span>{{ user.givenname }} {{ user.surname }}</span>
+                        <span class="label label-info">
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                            Administrator
+                            {% elseif 'ROLE_ADVANCED_USER' in user.roles %}
+                            Advanced user
+                            {% else %}
+                            User
+                            {% endif %}
+                        </span>
+                    </p>
+                    <div class="pull-right">
+                        <a class="btn btn-small btn-remove delete-user" rel="nofollow" href="#" data-toggle="modal" data-target="#deleteModal" data-user_id="{{user.id}}" data-action="delete">Delete</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <div>
+            {% include 'layouts/_pagination.html.twig' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
