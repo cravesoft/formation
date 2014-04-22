@@ -181,6 +181,7 @@ Copy and enable an example site config:
 
     sudo cp apache2/formation.conf /etc/apache2/sites-available/formation.conf
     sudo ln -s /etc/apache2/sites-available/formation.conf /etc/apache2/sites-enabled/formation.conf
+    sudo ln -s $HOME/formation/ /var/www/formation
 
 Make sure to edit the config file to match your setup:
 
