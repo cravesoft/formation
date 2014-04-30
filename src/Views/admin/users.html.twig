@@ -39,24 +39,23 @@
             </fieldset>
         </div>
         <div class="col-md-9">
-            <ul class="bordered-list my-users top-list">
+            <ul class="well-list my-users">
                 {% for user in users %}
                 <li class="my-user-row">
-                    <p class="user-name">
-                        <span>{{ user.givenname }} {{ user.surname }}</span>
-                        <span class="label label-info">
-                            {% if 'ROLE_ADMIN' in user.roles %}
-                            Administrator
-                            {% elseif 'ROLE_ADVANCED_USER' in user.roles %}
-                            Advanced user
-                            {% else %}
-                            User
-                            {% endif %}
-                        </span>
-                    </p>
-                    <div class="pull-right">
-                        <a class="btn btn-small btn-remove delete-user" rel="nofollow" href="#" data-toggle="modal" data-target="#deleteModal" data-user_id="{{user.id}}" data-action="delete">Delete</a>
-                    </div>
+                    <a href="{{ path('new_user', {user_id: user.id}) }}">
+                        <i class="fa fa-user"></i>
+                        <span>{{ user.surname }} {{ user.givenname }}</span>
+                    </a>
+                    <span class="label label-info">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                        Administrator
+                        {% elseif 'ROLE_ADVANCED_USER' in user.roles %}
+                        Advanced user
+                        {% else %}
+                        User
+                        {% endif %}
+                    </span>
+                    <a style="vertical-align: center;" class="pull-right btn btn-small btn-remove delete-user" rel="nofollow" href="#" data-toggle="modal" data-target="#deleteModal" data-user_id="{{user.id}}" data-action="delete">Delete</a>
                 </li>
                 {% endfor %}
             </ul>

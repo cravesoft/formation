@@ -10,7 +10,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class AdminControllerProvider implements ControllerProviderInterface
 {
-    const NUM_USERS_PER_PAGE = 10;
+    const NUM_USERS_PER_PAGE = 20;
 
     public function connect(Application $app)
     {
