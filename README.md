@@ -173,6 +173,9 @@ Set access permissions:
     chmod 644 formation/.htaccess
 
     # Make sure Apache can write to the log/, assets/css/ and cache/ directories
+    chown -R www-data formation/cache/assetic
+    chown -R www-data formation/cache/doctrine
+    chown www-data formation/log/production.log
     chmod -R u+rwX formation/log/
     chmod -R u+rwX formation/cache/
     chmod -R u+rwX formation/assets/css
